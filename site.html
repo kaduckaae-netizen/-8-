@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Школьный Проект | 8 «Б»</title>
+  <!-- Подключение Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Подключение React и ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Подключение Babel -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-900 text-zinc-100 min-h-screen font-sans antialiased selection:bg-white selection:text-black">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [tab, setTab] = useState('anatomy');
+      const [netStep, setNetStep] = useState(0);
+      const [quizAnswers, setQuizAnswers] = useState({});
+      const [quizSubmitted, setQuizSubmitted] = useState(false);
+
+      const quizQuestions = [
+        { 
+          id: 1, 
+          q: "Что такое HTML на языке веб-разработчиков?", 
+          options: ["Стили, шрифты и анимация", "База данных для хранения паролей", "Язык разметки, создающий каркас страницы"], 
+          correct: 2, 
+          explain: "HTML задает скелет сайта: заголовки (h1-h6), абзацы (p), кнопки (button) и контейнеры (div)." 
+        },
+        { 
+          id: 2, 
+          q: "За какую часть веб-сайта отвечает CSS?", 
+          options: ["Оформление, цвета, Flexbox/Grid и адаптивность", "Обработка кликов и вычисления", "Покупка домена и хостинга"], 
+          correct: 0, 
+          explain: "CSS отвечает за визуал: превращает необработанный текст и блоки в красивый интерфейс." 
+        },
+        { 
+          id: 3, 
+          q: "Какую роль в веб-разработке выполняет JavaScript?", 
+          options: ["Замедление загрузки сайта", "Оживление страницы: анимации, клики, DOM и API", "Защита ПК от вирусов"], 
+          correct: 1, 
+          explain: "JS — язык программирования, который делает страницу интерактивной и реагирует на действия пользователя." 
+        },
+        { 
+          id: 4, 
+          q: "Что такое Деплой (Deploy)?", 
+          options: ["Удаление исходного кода", "Публикация проекта с компьютера на сервер (Vercel/GitHub)", "Поиск ошибок в консоли"], 
+          correct: 1, 
+          explain: "Деплой — это загрузка готового кода в интернет, чтобы сайт мог открыть любой человек по ссылке." 
+        }
+      ];
+
+      const calculateScore = () => {
+        return quizQuestions.reduce((acc, q) => acc + (quizAnswers[q.id] === q.correct ? 1 : 0), 0);
+      };
+
+      return (
+        <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+          
+          {/* Header */}
+          <header className="bg-zinc-900/90 backdrop-blur-md p-6 rounded-3xl border border-zinc-800 flex justify-between items-center shadow-xl flex-wrap gap-4">
+            <div>
+              <span className="text-[10px] bg-white text-black font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Проект 8 «Б»</span>
+              <h1 className="text-2xl md:text-3xl font-black mt-2 text-white">Анатомия Веба</h1>
+              <p className="text-zinc-400 text-xs mt-1">Подробное руководство по верстке и деплою сайтов.</p>
+            </div>
+            <div className="text-right text-xs bg-zinc-950/60 p-3 rounded-2xl border border-zinc-800">
+              <span className="font-bold text-zinc-200 block">2 ученика 8 «Б»</span>
+              <span className="text-zinc-500 text-[10px] block mt-0.5">● Clean React Code</span>
+            </div>
+          </header>
+
+          {/* Navigation */}
+          <nav className="flex gap-1.5 bg-zinc-900/60 p-1.5 rounded-2xl border border-zinc-800/80 overflow-x-auto">
+            {[
+              { id: 'anatomy', label: '1. База (HTML/CSS/JS)' },
+              { id: 'network', label: '2. Сеть & DNS' },
+              { id: 'roadmap', label: '3. Путь к Деплою' },
+              { id: 'quiz', label: '4. Проверка знаний' }
+            ].map(t => (
+              <button 
+                key={t.id} 
+                onClick={() => setTab(t.id)} 
+                className={`flex-1 py-2.5 px-3 rounded-xl font-bold text-xs transition-all cursor-pointer whitespace-nowrap ${
+                  tab === t.id ? 'bg-white text-black shadow-md' : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Section 1: Anatomy */}
+          {tab === 'anatomy' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* HTML */}
+              <div className="bg-zinc-900/80 p-5 rounded-2xl border border-zinc-800 shadow-md space-y-3">
+                <div>
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Структура</span>
+                  <h3 className="font-black text-xl text-white mt-0.5">HTML</h3>
+                  <p className="text-zinc-400 text-xs mt-1">Каркас и разметка сайта.</p>
+                </div>
+                <ul className="space-y-1.5 border-t border-zinc-800 pt-3 text-xs text-zinc-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Теги: &lt;div&gt;, &lt;h1&gt;, &lt;button&gt;.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Контент: текст, ссылки, медиа.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CSS */}
+              <div className="bg-zinc-900/80 p-5 rounded-2xl border border-zinc-800 shadow-md space-y-3">
+                <div>
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Стиль</span>
+                  <h3 className="font-black text-xl text-white mt-0.5">CSS</h3>
+                  <p className="text-zinc-400 text-xs mt-1">Внешний вид и адаптивность.</p>
+                </div>
+                <ul className="space-y-1.5 border-t border-zinc-800 pt-3 text-xs text-zinc-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Дизайн: цвета, шрифты, тени.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Верстка: Flexbox, CSS Grid.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* JS */}
+              <div className="bg-zinc-900/80 p-5 rounded-2xl border border-zinc-800 shadow-md space-y-3">
+                <div>
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Логика</span>
+                  <h3 className="font-black text-xl text-white mt-0.5">JavaScript</h3>
+                  <p className="text-zinc-400 text-xs mt-1">Интерактивность страницы.</p>
+                </div>
+                <ul className="space-y-1.5 border-t border-zinc-800 pt-3 text-xs text-zinc-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Действия: обработка кликов.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-white font-bold">•</span>
+                    <span>Динамика: DOM и запросы (API).</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Section 2: Network */}
+          {tab === 'network' && (
+            <div className="bg-zinc-900/80 p-6 rounded-3xl border border-zinc-800 space-y-4 shadow-md">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Что происходит при открытии сайта?</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {[
+                  { title: "1. Запрос URL", desc: "Ввод адреса" },
+                  { title: "2. DNS Поиск", desc: "Получение IP" },
+                  { title: "3. Сервер", desc: "Скачивание файлов" },
+                  { title: "4. Рендеринг", desc: "Отрисовка" }
+                ].map((s, i) => (
+                  <button 
+                    key={i} 
+                    onClick={() => setNetStep(i)} 
+                    className={`p-3 rounded-xl border text-left transition cursor-pointer ${
+                      netStep === i ? 'bg-white border-white text-black font-bold' : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    <div className="text-xs">{s.title}</div>
+                    <div className="text-[10px] opacity-70 mt-0.5">{s.desc}</div>
+                  </button>
+                ))}
+              </div>
+              <div className="bg-zinc-950/80 p-5 rounded-2xl border border-zinc-800 text-center text-xs text-zinc-300 leading-relaxed">
+                {netStep === 0 && "Браузер принимается обрабатывать URL-адрес и готовит сетевой запрос."}
+                {netStep === 1 && "DNS-сервер переводит понятный домен (например, site.com) в IP-адрес сервера (192.168.1.1)."}
+                {netStep === 2 && "Сервер передает браузеру файлы исходного кода: index.html, style.css и main.js."}
+                {netStep === 3 && "Браузер считывает HTML-каркас, применяет CSS-стили и запускает JS-скрипты."}
+              </div>
+            </div>
+          )}
+
+          {/* Section 3: Roadmap */}
+          {tab === 'roadmap' && (
+            <div className="bg-zinc-900/80 p-6 rounded-3xl border border-zinc-800 space-y-3 shadow-md">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">Этапы веб-разработки</h3>
+              {[
+                { step: "01", title: "Идея и Техническое Задание", desc: "Формулирование целей проекта и структуры будущего сайта." },
+                { step: "02", title: "Дизайн и Прототип", desc: "Создание визуального макета интерфейса (Figma)." },
+                { step: "03", title: "Написание кода (Frontend)", desc: "Верстка структуры (HTML), стилизация (CSS) и программирование логики (JS)." },
+                { step: "04", title: "Тестирование и Отладка", desc: "Проверка работы интерфейса на смартфонах и исправление ошибок." },
+                { step: "05", title: "Деплой в сеть", desc: "Загрузка кода через GitHub на хостинг (Vercel, Netlify или GitHub Pages)." }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 p-3.5 bg-zinc-950/80 rounded-2xl border border-zinc-800">
+                  <span className="font-mono font-bold bg-white text-black text-xs px-2.5 py-1 rounded-lg shadow-sm">{item.step}</span>
+                  <div>
+                    <h4 className="font-bold text-xs text-zinc-100">{item.title}</h4>
+                    <p className="text-zinc-400 text-[11px] mt-0.5">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Section 4: Quiz */}
+          {tab === 'quiz' && (
+            <div className="bg-zinc-900/80 p-6 rounded-3xl border border-zinc-800 space-y-5 shadow-md">
+              <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 className="font-bold text-xs uppercase tracking-wider text-zinc-400">Проверка знаний</h3>
+                {quizSubmitted && (
+                  <span className="bg-white text-black text-xs font-bold px-3 py-1 rounded-full">
+                    Результат: {calculateScore()} / {quizQuestions.length}
+                  </span>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                {quizQuestions.map(q => (
+                  <div key={q.id} className="bg-zinc-950/80 p-4.5 rounded-2xl border border-zinc-800 space-y-3">
+                    <p className="font-bold text-xs text-zinc-200">{q.id}. {q.q}</p>
+                    <div className="space-y-2">
+                      {q.options.map((opt, idx) => {
+                        const isSelected = quizAnswers[q.id] === idx;
+                        const isCorrect = q.correct === idx;
+                        let btnStyle = "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700";
+                        
+                        if (quizSubmitted) {
+                          if (isCorrect) btnStyle = "bg-white border-white text-black font-bold";
+                          else if (isSelected) btnStyle = "bg-zinc-800 text-zinc-600 line-through border-zinc-800";
+                        } else if (isSelected) {
+                          btnStyle = "bg-white border-white text-black font-bold";
+                        }
+
+                        return (
+                          <button 
+                            key={idx} 
+                            onClick={() => !quizSubmitted && setQuizAnswers({ ...quizAnswers, [q.id]: idx })} 
+                            className={`w-full text-left p-3 rounded-xl border text-xs transition cursor-pointer ${btnStyle}`}
+                          >
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {quizSubmitted && (
+                      <p className="text-[11px] text-zinc-400 pt-2 border-t border-zinc-800">
+                        <strong className="text-white">Пояснение:</strong> {q.explain}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {!quizSubmitted ? (
+                <button 
+                  onClick={() => setQuizSubmitted(true)} 
+                  disabled={Object.keys(quizAnswers).length < quizQuestions.length} 
+                  className="w-full py-3.5 bg-white text-black font-bold text-xs rounded-2xl shadow disabled:opacity-30 cursor-pointer hover:bg-zinc-200 transition"
+                >
+                  Узнать результат
+                </button>
+              ) : (
+                <button 
+                  onClick={() => { setQuizSubmitted(false); setQuizAnswers({}); }} 
+                  className="w-full py-3.5 bg-zinc-800 text-white font-bold text-xs rounded-2xl border border-zinc-700 cursor-pointer hover:bg-zinc-700 transition"
+                >
+                  Пройти заново
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Footer */}
+          <footer className="text-center text-[11px] text-zinc-500 pt-2 border-t border-zinc-800/60">
+            Школьный проект по информатике • 8 «Б» класс
+          </footer>
+
+        </div>
+      );
+    }
+
+    // Рендеринг приложения
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>
